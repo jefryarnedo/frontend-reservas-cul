@@ -41,10 +41,20 @@
 		error = null;
 		try {
 			// Consulta a la API FastAPI
+			const token = localStorage.getItem('token_acceso');
+
 			const [resRes, resEsp] = await Promise.all([
-				fetch('https://api-reservas2026.onrender.com/reservas/'),
-				fetch('https://api-reservas2026.onrender.com/espacios/')
-			]);
+    			fetch('https://api-reservas2026.onrender.com/reservas/', {
+        			headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }),
+    fetch('https://api-reservas2026.onrender.com/espacios/', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+]);
 
 			if (!resRes.ok) throw new Error('No se pudo obtener reservas');
 			reservas = await resRes.json();
