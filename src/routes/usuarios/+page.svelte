@@ -4,6 +4,7 @@
 	import FormInput from '$lib/components/ui/FormInput.svelte';
 	import FormSelect from '$lib/components/ui/FormSelect.svelte';
 	import DataTable from '$lib/components/ui/DataTable.svelte';
+	import { onMount } from 'svelte';
 
 	let mostrarFormulario = $state(false);
 	let nombreCompleto = $state('');
@@ -41,7 +42,7 @@
 	];
 
 	// Los datos reales se cargarán desde FastAPI.
-	const usuarios = $state([]);
+	let usuarios = $state([]);
 
 	const usuariosFiltrados = $derived(
 		usuarios.filter((usuario) => {
@@ -56,6 +57,46 @@
 			);
 		})
 	);
+async function cargarUsuarios() {
+    try {
+        cargando = true;
+
+        const token = localStorage.getItem('token_acceso');
+
+        const response = await fetch(
+            'https://api-reservas2026.onrender.com/usuarios/',
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error('No se pudieron cargar los usuarios');
+        }
+
+        const data = await response.json();
+
+        usuarios = data.map((u) => ({
+            id: u.id_usuario,
+            nombreCompleto: u.nombre_completo,
+            correoElectronico: u.correo_electronico,
+            telefono: u.telefono,
+            rol: u.id_rol,
+            facultad: u.id_facultad,
+            estadoUsuario: u.estado ? 'Activo' : 'Inactivo'
+        }));
+    } catch (error) {
+        mensajeError = error.message;
+    } finally {
+        cargando = false;
+    }
+}
+
+onMount(() => {
+    cargarUsuarios();
+});
 
 	function limpiarFormulario() {
 		nombreCompleto = '';
