@@ -2,22 +2,41 @@
 	let fechaInicial = $state('');
 	let fechaFinal = $state('');
 	let tipoReporte = $state('');
-
+	let datosReporte = $state(null);
 	let consultaRealizada = $state(false);
 	let mensajeError = $state('');
 
-	function consultarReporte(evento) {
-		evento.preventDefault();
-		mensajeError = '';
+	async function consultarReporte(evento) {
+    evento.preventDefault();
+    mensajeError = '';
 
-		if (fechaInicial && fechaFinal && fechaFinal < fechaInicial) {
-			mensajeError = 'La fecha final no puede ser anterior a la fecha inicial.';
-			return;
-		}
+    if (fechaInicial && fechaFinal && fechaFinal < fechaInicial) {
+        mensajeError = 'La fecha final no puede ser anterior a la fecha inicial.';
+        return;
+    }
 
-		// La consulta real se implementará al conectar el backend.
-		consultaRealizada = true;
-	}
+    try {
+        const token = localStorage.getItem('token_acceso');
+
+        const response = await fetch(
+            `https://api-reservas2026.onrender.com/reportes/?tipo_reporte=${tipoReporte.toLowerCase()}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error('No se pudo generar el reporte');
+        }
+
+        datosReporte = await response.json();
+        consultaRealizada = true;
+    } catch (error) {
+        mensajeError = error.message;
+    }
+}
 
 	function limpiarFiltros() {
 		fechaInicial = '';
@@ -118,10 +137,13 @@
 				<span class="indicador-etiqueta">RESERVAS</span>
 			</div>
 
-			<div class="indicador-valor">—</div>
+			<div class="indicador-valor">
+   				 {datosReporte?.indicadores?.total_reservas ?? '-'}
+ 			</div>
 			<p>Total de reservas</p>
-			<span class="indicador-nota">Pendiente de conexión</span>
-		</article>
+			<span class="indicador-nota">
+    			Datos obtenidos del reporte
+			</span>
 
 		<article class="indicador-card">
 			<div class="indicador-superior">
@@ -129,9 +151,13 @@
 				<span class="indicador-etiqueta">ESPACIOS</span>
 			</div>
 
-			<div class="indicador-valor">—</div>
+			<div class="indicador-valor">
+    			{datosReporte?.indicadores?.espacios_utilizados ?? '-'}
+			</div>
 			<p>Espacios utilizados</p>
-			<span class="indicador-nota">Pendiente de conexión</span>
+			<span class="indicador-nota">
+    		Datos obtenidos del reporte
+		</span>
 		</article>
 
 		<article class="indicador-card">
@@ -140,9 +166,13 @@
 				<span class="indicador-etiqueta">RECURSOS</span>
 			</div>
 
-			<div class="indicador-valor">—</div>
+			<div class="indicador-valor">
+   				 {datosReporte?.indicadores?.total_recursos ?? '-'}
+			</div>
 			<p>Recursos asignados</p>
-			<span class="indicador-nota">Pendiente de conexión</span>
+			<span class="indicador-nota">
+    			Datos obtenidos del reporte
+			</span>
 		</article>
 	</section>
 
