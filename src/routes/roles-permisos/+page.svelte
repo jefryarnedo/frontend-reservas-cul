@@ -1,8 +1,11 @@
 <script>
 	import PageHeader from '$lib/components/ui/PageHeader.svelte';
 	import BaseButton from '$lib/components/ui/BaseButton.svelte';
+	import { onMount } from 'svelte';
 
 	let mostrarFormulario = $state(false);
+	let roles = $state([]);
+	let cargando = $state(false);
 	let nombreRol = $state('');
 	let descripcionRol = $state('');
 	let permisosSeleccionados = $state([]);
@@ -16,7 +19,39 @@
 		'Usuarios',
 		'Roles y permisos'
 	];
+	async function cargarRoles() {
+    try {
+        cargando = true;
 
+        const token = localStorage.getItem('token_acceso');
+
+        const response = await fetch(
+            'https://api-reservas2026.onrender.com/roles/',
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error('No se pudieron cargar los roles');
+        }
+
+        roles = await response.json();
+		
+		console.log('ROLES API:', roles);
+    
+	} catch (error) {
+        console.error(error);
+    } finally {
+        cargando = false;
+    }
+}
+
+onMount(() => {
+    cargarRoles();
+});
 	function limpiarFormulario() {
 		nombreRol = '';
 		descripcionRol = '';
@@ -190,7 +225,7 @@
 			<div class="tabla-vacia">
 				<div class="tabla-vacia-icono" aria-hidden="true">♙</div>
 
-				<h3>No hay roles cargados</h3>
+				<h3>Roles cargados: {roles.length}</h3>
 
 				<p>Los roles aparecerán aquí cuando se conecte la base de datos.</p>
 
