@@ -42,8 +42,8 @@
 		try {
 			// Consulta a la API FastAPI
 			const [resRes, resEsp] = await Promise.all([
-				fetch('http://127.0.0.1:8000/reservas/'),
-				fetch('http://127.0.0.1:8000/espacios/')
+				fetch('https://api-reservas2026.onrender.com/reservas/'),
+				fetch('https://api-reservas2026.onrender.com/espacios/')
 			]);
 
 			if (!resRes.ok) throw new Error('No se pudo obtener reservas');
@@ -66,7 +66,7 @@
 		}
 
 		try {
-			const res = await fetch('http://127.0.0.1:8000/reservas/', {
+			const res = await fetch('https://api-reservas2026.onrender.com/reservas/', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(nuevaReserva)
@@ -101,7 +101,7 @@
 			if (!actual) return;
 
 			// Actualizamos con el nuevo estado
-			const res = await fetch(`http://127.0.0.1:8000/reservas/${id_reserva}`, {
+			const res = await fetch(`https://api-reservas2026.onrender.com/reservas/${id_reserva}`, {
 				method: 'PUT',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({

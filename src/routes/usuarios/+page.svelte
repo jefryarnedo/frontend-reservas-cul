@@ -12,7 +12,7 @@
 
     import DataTable from '$lib/components/ui/DataTable.svelte';
 
-    const API_BASE = 'http://127.0.0.1:8000';
+    const API_BASE = 'https://api-reservas2026.onrender.com';
 
     let mostrarFormulario = $state(false);
 

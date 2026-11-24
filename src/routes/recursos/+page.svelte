@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 
-	const API_URL = 'http://127.0.0.1:8000';
+	const API_URL = 'https://api-reservas2026.onrender.com';
 
 	// Estado de la página
 	let mostrarModal = $state(false);

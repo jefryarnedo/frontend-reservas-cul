@@ -139,9 +139,9 @@
 			// Cada endpoint se consulta por separado para que un fallo en facultades
 			// no impida cargar los tipos de espacios ni la lista de espacios.
 			const [resEspacios, resTipos, resFacultades] = await Promise.allSettled([
-				fetch('http://127.0.0.1:8000/espacios/'),
-				fetch('http://127.0.0.1:8000/tipos-espacio/'),
-				fetch('http://127.0.0.1:8000/facultades/')
+				fetch('https://api-reservas2026.onrender.com/espacios/'),
+				fetch('https://api-reservas2026.onrender.com/tipos-espacio/'),
+				fetch('https://api-reservas2026.onrender.com/facultades/')
 			]);
 
 			// ESPACIOS
@@ -313,7 +313,7 @@
 
 		try {
 			// Persistencia real vía POST a FastAPI y PostgreSQL en Neon
-			const respuesta = await fetch('http://127.0.0.1:8000/espacios/', {
+			const respuesta = await fetch('https://api-reservas2026.onrender.com/espacios/', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({

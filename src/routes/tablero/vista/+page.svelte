@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	const API = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
+	const API = import.meta.env.VITE_API_BASE_URL || 'https://api-reservas2026.onrender.com';
 	let datos = $state(null);
 	let mensaje = $state('Cargando tablero…');
 	const fmt = (n) => new Intl.NumberFormat('es-CO').format(Number(n ?? 0));

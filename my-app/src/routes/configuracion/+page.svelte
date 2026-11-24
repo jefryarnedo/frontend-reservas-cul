@@ -63,7 +63,7 @@
 			const sesion = localStorage.getItem('usuario_sesion');
 			const usuario = sesion ? JSON.parse(sesion) : { id_usuario: 1 };
 
-			await fetch('http://127.0.0.1:8000/auditoria/', {
+			await fetch('https://api-reservas2026.onrender.com/auditoria/', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
